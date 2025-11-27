@@ -2,12 +2,13 @@ from io import BytesIO
 
 import magic
 from fastapi import HTTPException, UploadFile
+from google.genai import types
 
 from app.common.constants import PROJECT_FILE_STORE, user_uuid
 from app.common.settings import settings
 
 
-class BriefService:
+class DocumentsService:
     def __init__(self, client):
         self.client = client
         self.file_search_store_name = None
@@ -89,3 +90,33 @@ class BriefService:
             )
 
         return store_name
+
+    async def search_individual_file(self, query: str, file_info: dict) -> dict:
+        response = await self.client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=query,
+            config=types.GenerateContentConfig(
+                tools=[
+                    types.Tool(
+                        file_search=types.FileSearch(
+                            file_search_store_names=[self.file_search_store_name]
+                        )
+                    )
+                ]
+            )
+        )
+
+        return {
+            "filename": file_info['filename'],
+            "snippet": response.text
+        }
+
+
+    async def search_all_user_files(self, query: str, project_files: list[dict]) -> list[dict]:
+        results = []
+        for file_info in project_files:
+            result = await self.search_individual_file(query, file_info)
+            if result:
+                results.append(result)
+
+        return results
