@@ -1,11 +1,18 @@
+"""
+Global constants for the application.
+
+This module defines in-memory storage and user identification for development.
+In production, these should be replaced with proper database and authentication.
+"""
 import uuid
 
-# This is a storage simulation. Is going to keep track in memory of the uploaded files for this API.
-# Normally, this would be a combination of RDB + Cache with a proper strategy, but I will keep it simple.
-PROJECT_FILE_STORE = {}
+# In-memory file storage simulation
+# Structure: {user_uuid: [{'filename': str, 'content': bytes, 'mime_type': str}]}
+# Production replacement: PostgreSQL + Redis cache + S3/GCS blob storage
+PROJECT_FILE_STORE: dict[str, list[dict]] = {}
 
-# Each user has an unique ID which would be used to identify their file store.
-# However, we don't have authentication in this assessment, so we will simulate with a single user.
-user_uuid = str(uuid.uuid4())
+# Simulated user identifier (single user for development)
+# Production replacement: JWT-based authentication with user sessions
+user_uuid: str = str(uuid.uuid4())
 
 

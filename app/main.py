@@ -26,9 +26,24 @@ app.include_router(
 
 @app.get("/")
 async def root():
+    """
+    Root endpoint that returns a welcome message.
+    
+    Returns:
+        dict: Welcome message and API information.
+    """
     return {"message": "Welcome to the Agile Monkeys Assessment API"}
 
 
 @app.get("/health")
 async def health_check():
+    """
+    Health check endpoint to verify the API is running.
+    
+    This endpoint is useful for monitoring, load balancers, and container
+    orchestration systems to verify service availability.
+    
+    Returns:
+        dict: Health status of the service.
+    """
     return {"status": "healthy"}
