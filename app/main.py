@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.router.documents_router import router as documents_router
+
 app = FastAPI(
     title="The Agile Monkeys Assessment API",
     description="Gemini API integration with FastAPI for document briefing generation",
@@ -14,6 +16,12 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+app.include_router(
+    documents_router,
+    prefix="/documents",
+    tags=["documents"],
 )
 
 @app.get("/")
