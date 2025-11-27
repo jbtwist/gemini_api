@@ -59,7 +59,6 @@ class DocumentsService:
         return self.file_search_store_name
 
     async def store_project_files(self, file: UploadFile, mime_type: str) -> None:
-
         if user_uuid not in PROJECT_FILE_STORE:
             PROJECT_FILE_STORE[user_uuid] = []
 
@@ -73,7 +72,6 @@ class DocumentsService:
         )
 
     async def upload_files_to_store(self) -> str:
-        """Upload files to the file search store and return the store name."""
         store_name = await self.ensure_store_exists()
 
         for file_data in PROJECT_FILE_STORE.get(user_uuid, []):
